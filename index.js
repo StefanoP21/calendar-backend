@@ -11,9 +11,7 @@ const port = process.env.PORT;
 app.use(express.static('public'));
 
 // Routes
-/* app.get('/', (req, res) => {
-  res.json({ ok: true, message: 'Hello World' });
-}); */
+app.use('/api/auth', require('./routes/auth'));
 
 // Server
 app.listen(port, () => {
