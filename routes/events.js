@@ -29,7 +29,7 @@ router.post(
     check('start', 'La fecha de incio es obligatoria')
       .not()
       .isEmpty()
-      .isDate()
+      .isISO8601()
       .withMessage('La fecha de inicio debe ser una fecha válida')
       .custom((value, { req }) => {
         const { end } = req.body;
@@ -44,7 +44,7 @@ router.post(
     check('end', 'La fecha de fin es obligatoria')
       .not()
       .isEmpty()
-      .isDate()
+      .isISO8601()
       .withMessage('La fecha de fin debe ser una fecha válida'),
     check('user', 'El usuario es obligatorio').not().isEmpty(),
     validateFields,
