@@ -1,4 +1,4 @@
-const { response } = require('express');
+const { request, response } = require('express');
 const Event = require('../models/Event');
 
 const getEvents = async (req, res = response) => {
@@ -18,7 +18,7 @@ const getEvents = async (req, res = response) => {
   }
 };
 
-const createEvent = async (req, res = response) => {
+const createEvent = async (req = request, res = response) => {
   const event = new Event(req.body);
 
   try {
@@ -39,7 +39,7 @@ const createEvent = async (req, res = response) => {
   }
 };
 
-const updateEvent = async (req, res = response) => {
+const updateEvent = async (req = request, res = response) => {
   const eventId = req.params.id;
 
   try {
@@ -81,11 +81,39 @@ const updateEvent = async (req, res = response) => {
   }
 };
 
-const deleteEvent = (req, res = response) => {
-  res.status(200).json({
-    ok: true,
-    msg: 'DELETE - deleteEvent',
-  });
+const deleteEvent = async (req = request, res = response) => {
+  const eventId = req.params.id;
+
+  try {
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({
+        ok: false,
+        msg: 'Evento no encontrado por ese id',
+      });
+    }
+
+    if (event.user.toString() !== req.uid) {
+      return res.status(401).json({
+        ok: false,
+        msg: 'No tiene privilegio de eliminar este evento',
+      });
+    }
+
+    await Event.findByIdAndDelete(eventId);
+
+    res.status(200).json({
+      ok: true,
+      msg: 'Evento eliminado',
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: 'Hable con el administrador',
+    });
+  }
 };
 
 module.exports = {
