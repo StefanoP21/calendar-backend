@@ -15,7 +15,9 @@ router.post(
   '/new',
   [
     check('name', 'El nombre es obligatorio').not().isEmpty(),
-    check('email', 'El correo es obligatorio').isEmail(),
+    check('email', 'El correo es obligatorio').not().isEmpty(),
+    check('email', 'El correo no es válido').isEmail(),
+    check('password', 'La contraseña es obligatoria').not().isEmpty(),
     check(
       'password',
       'La contraseña debe tener al menos 6 caracteres'
@@ -28,7 +30,8 @@ router.post(
 router.post(
   '/',
   [
-    check('email', 'El correo es obligatorio').isEmail(),
+    check('email', 'El correo es obligatorio').not().isEmpty(),
+    check('email', 'El correo no es válido').isEmail(),
     check('password', 'La contraseña es obligatoria').not().isEmpty(),
     check(
       'password',
