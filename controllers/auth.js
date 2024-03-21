@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 const createUser = async (req, res = response) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -38,15 +38,44 @@ const createUser = async (req, res = response) => {
   }
 };
 
-const loginUser = (req, res = response) => {
-  const { name, email } = req.body;
+const loginUser = async (req, res = response) => {
+  const { email, password } = req.body;
 
-  res.status(200).json({
-    ok: true,
-    msg: 'POST - Login',
-    name,
-    email,
-  });
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'The user does not exist with that email',
+      });
+    }
+
+    // Confirm passwords
+    const validPassword = bcrypt.compareSync(password, user.password);
+
+    if (!validPassword) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'Invalid password',
+      });
+    }
+
+    // TODO: Generate JWT
+
+    res.status(200).json({
+      ok: true,
+      msg: 'Login successfully',
+      uid: user.id,
+      name: user.name,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: 'Please talk to the administrator',
+    });
+  }
 };
 
 const renewToken = (req, res = response) => {
