@@ -26,7 +26,7 @@ router.post(
   '/new',
   [
     check('title', 'El título es obligatorio').not().isEmpty(),
-    check('start', 'La fecha de incio es obligatoria')
+    check('start', 'La fecha de inicio es obligatoria')
       .not()
       .isEmpty()
       .isISO8601()
@@ -52,7 +52,34 @@ router.post(
   createEvent
 );
 
-router.put('/:id', updateEvent);
+router.put(
+  '/:id',
+  [
+    check('title', 'El título es obligatorio').not().isEmpty(),
+    check('start', 'La fecha de inicio es obligatoria')
+      .not()
+      .isEmpty()
+      .isISO8601()
+      .withMessage('La fecha de inicio debe ser una fecha válida')
+      .custom((value, { req }) => {
+        const { end } = req.body;
+
+        if (value > end) {
+          throw new Error(
+            'La fecha de inicio debe ser menor a la fecha de fin'
+          );
+        }
+        return true;
+      }),
+    check('end', 'La fecha de fin es obligatoria')
+      .not()
+      .isEmpty()
+      .isISO8601()
+      .withMessage('La fecha de fin debe ser una fecha válida'),
+    validateFields,
+  ],
+  updateEvent
+);
 
 router.delete('/:id', deleteEvent);
 
