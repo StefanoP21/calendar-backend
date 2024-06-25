@@ -1,4 +1,5 @@
 interface Object {
+  id: string;
   title: string;
   start: Date;
   end: Date;
@@ -8,6 +9,7 @@ interface Object {
 
 export class EventEntity {
   constructor(
+    public id: string,
     public title: string,
     public start: Date,
     public end: Date,
@@ -16,7 +18,7 @@ export class EventEntity {
   ) {}
 
   public static fromObject(object: Object): EventEntity {
-    const { title, start, end, user, notes } = object;
+    const { id, title, start, end, user, notes } = object;
     let newStart;
     let newEnd;
 
@@ -36,6 +38,6 @@ export class EventEntity {
       }
     }
 
-    return new EventEntity(title, start, end, user, notes);
+    return new EventEntity(id, title, start, end, user, notes);
   }
 }

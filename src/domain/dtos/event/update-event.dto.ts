@@ -1,5 +1,6 @@
 export class UpdateEventDto {
   private constructor(
+    public readonly user: Object,
     public readonly title?: string,
     public readonly start?: Date,
     public readonly end?: Date,
@@ -13,12 +14,13 @@ export class UpdateEventDto {
     if (this.start) returnObj.start = this.start;
     if (this.end) returnObj.end = this.end;
     if (this.notes) returnObj.notes = this.notes;
+    if (this.user) returnObj.user = this.user;
 
     return returnObj;
   }
 
   static create(props: { [key: string]: any }): [string?, UpdateEventDto?] {
-    const { title, start, end, notes } = props;
+    const { user, title, start, end, notes } = props;
     let newStart = start;
     let newEnd = end;
 
@@ -38,6 +40,6 @@ export class UpdateEventDto {
       }
     }
 
-    return [undefined, new UpdateEventDto(title, start, end, notes)];
+    return [undefined, new UpdateEventDto(user, title, start, end, notes)];
   }
 }
