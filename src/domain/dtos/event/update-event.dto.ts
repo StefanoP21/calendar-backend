@@ -1,5 +1,6 @@
 export class UpdateEventDto {
   private constructor(
+    public readonly id: string,
     public readonly user: Object,
     public readonly title?: string,
     public readonly start?: Date,

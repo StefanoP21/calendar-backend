@@ -1,24 +1,14 @@
-interface Object {
-  id: string;
-  title: string;
-  start: Date;
-  end: Date;
-  user: Object;
-  notes?: string;
-}
-
 export class EventEntity {
   constructor(
-    public id: string,
     public title: string,
     public start: Date,
     public end: Date,
     public user: Object,
-    public notes?: string
+    public notes?: string | null
   ) {}
 
-  public static fromObject(object: Object): EventEntity {
-    const { id, title, start, end, user, notes } = object;
+  public static fromObject(object: { [key: string]: any }): EventEntity {
+    const { title, start, end, user, notes = '' } = object;
     let newStart;
     let newEnd;
 
@@ -38,6 +28,6 @@ export class EventEntity {
       }
     }
 
-    return new EventEntity(id, title, start, end, user, notes);
+    return new EventEntity(title, start, end, user, notes);
   }
 }
