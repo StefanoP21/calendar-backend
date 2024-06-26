@@ -23,11 +23,4 @@ const eventSchema = new Schema({
   },
 });
 
-eventSchema.method('toJSON', function () {
-  const { __v, _id, ...object }: { __v: number; _id: any; id: any } =
-    this.toObject();
-  object.id = _id;
-  return object;
-});
-
-export const EventModel = model('User', eventSchema, 'users');
+export const EventModel = model('Event', eventSchema, 'events');

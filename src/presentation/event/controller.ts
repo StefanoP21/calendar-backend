@@ -13,7 +13,7 @@ import {
 export class EventController {
   constructor(private readonly eventRepository: EventRepository) {}
 
-  public getEvents(req: Request, res: Response) {
+  public getEvents = (req: Request, res: Response) => {
     new GetEvents(this.eventRepository)
       .execute()
       .then((events) =>
@@ -28,9 +28,9 @@ export class EventController {
           msg: error,
         })
       );
-  }
+  };
 
-  public getEventById(req: Request, res: Response) {
+  public getEventById = (req: Request, res: Response) => {
     const id = req.params.id;
 
     new GetEvent(this.eventRepository)
@@ -47,9 +47,9 @@ export class EventController {
           msg: error,
         })
       );
-  }
+  };
 
-  public createEvent(req: Request, res: Response) {
+  public createEvent = (req: Request, res: Response) => {
     const [error, createEventDto] = CreateEventDto.create(req.body);
 
     if (error) {
@@ -73,11 +73,11 @@ export class EventController {
           msg: error,
         })
       );
-  }
+  };
 
-  public updateEvent(req: Request, res: Response) {
+  public updateEvent = (req: Request, res: Response) => {
     const id = req.params.id;
-    const [error, updatedEventDto] = UpdateEventDto.update({
+    const [error, updateEventDto] = UpdateEventDto.update({
       ...req.body,
       id,
     });
@@ -90,7 +90,7 @@ export class EventController {
     }
 
     new UpdateEvent(this.eventRepository)
-      .execute(updatedEventDto!)
+      .execute(updateEventDto!)
       .then((updatedEvent) =>
         res.status(200).json({
           ok: true,
@@ -103,9 +103,9 @@ export class EventController {
           msg: error,
         })
       );
-  }
+  };
 
-  public deleteEvent(req: Request, res: Response) {
+  public deleteEvent = (req: Request, res: Response) => {
     const id = req.params.id;
 
     new DeleteEvent(this.eventRepository)
@@ -122,5 +122,5 @@ export class EventController {
           msg: error,
         })
       );
-  }
+  };
 }

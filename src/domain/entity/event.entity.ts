@@ -1,5 +1,6 @@
 export class EventEntity {
   constructor(
+    public id: string,
     public title: string,
     public start: Date,
     public end: Date,
@@ -8,7 +9,11 @@ export class EventEntity {
   ) {}
 
   public static fromObject(object: { [key: string]: any }): EventEntity {
-    const { title, start, end, user, notes = '' } = object;
+    const { id, title, start, end, user, notes } = object;
+
+    if (!id || !title || !start || !end || !user)
+      throw 'Missign required fields in event entity';
+
     let newStart;
     let newEnd;
 
@@ -28,6 +33,6 @@ export class EventEntity {
       }
     }
 
-    return new EventEntity(title, start, end, user, notes);
+    return new EventEntity(id, title, start, end, user, notes);
   }
 }
