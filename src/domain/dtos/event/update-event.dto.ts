@@ -20,7 +20,7 @@ export class UpdateEventDto {
     return returnObj;
   }
 
-  static create(props: { [key: string]: any }): [string?, UpdateEventDto?] {
+  static update(props: { [key: string]: any }): [string?, UpdateEventDto?] {
     const { user, title, start, end, notes } = props;
     let newStart = start;
     let newEnd = end;
