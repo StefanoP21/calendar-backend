@@ -1,6 +1,7 @@
 import { EventModel } from '../../data/mongodb';
 import {
   CreateEventDto,
+  CustomError,
   EventDatasource,
   EventEntity,
   UpdateEventDto,
@@ -16,13 +17,17 @@ export class EventDatasourceImpl implements EventDatasource {
   async getAll(): Promise<EventEntity[]> {
     const events = await EventModel.find().populate('user', 'name');
 
+    if (events.length < 1) {
+      throw new CustomError('Events not found on database', 404);
+    }
+
     return events.map((event) => EventEntity.fromObject(event));
   }
 
   async findById(id: string): Promise<EventEntity> {
     const event = await EventModel.findById(id);
 
-    if (!event) throw `Event with id ${id} not found`;
+    if (!event) throw new CustomError(`Event with id ${id} not found`);
 
     return EventEntity.fromObject(event);
   }

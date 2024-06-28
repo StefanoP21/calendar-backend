@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import {
   CreateEvent,
   CreateEventDto,
+  CustomError,
   DeleteEvent,
   EventRepository,
   GetEvent,
@@ -13,6 +14,20 @@ import {
 export class EventController {
   constructor(private readonly eventRepository: EventRepository) {}
 
+  private handleError = (res: Response, error: unknown) => {
+    if (error instanceof CustomError) {
+      return res.status(error.statusCode).json({
+        ok: false,
+        msg: error.message,
+      });
+    }
+
+    res.status(500).json({
+      ok: false,
+      msg: `Internal server error: ${error}`,
+    });
+  };
+
   public getEvents = (req: Request, res: Response) => {
     new GetEvents(this.eventRepository)
       .execute()
@@ -22,12 +37,7 @@ export class EventController {
           events,
         })
       )
-      .catch((error) =>
-        res.status(404).json({
-          ok: false,
-          msg: error,
-        })
-      );
+      .catch((error) => this.handleError(res, error));
   };
 
   public getEventById = (req: Request, res: Response) => {
@@ -41,12 +51,7 @@ export class EventController {
           event,
         })
       )
-      .catch((error) =>
-        res.status(404).json({
-          ok: false,
-          msg: error,
-        })
-      );
+      .catch((error) => this.handleError(res, error));
   };
 
   public createEvent = (req: Request, res: Response) => {
@@ -97,12 +102,7 @@ export class EventController {
           event: updatedEvent,
         })
       )
-      .catch((error) =>
-        res.status(404).json({
-          ok: false,
-          msg: error,
-        })
-      );
+      .catch((error) => this.handleError(res, error));
   };
 
   public deleteEvent = (req: Request, res: Response) => {
@@ -116,11 +116,6 @@ export class EventController {
           event: deletedEvent,
         })
       )
-      .catch((error) =>
-        res.status(404).json({
-          ok: false,
-          msg: error,
-        })
-      );
+      .catch((error) => this.handleError(res, error));
   };
 }

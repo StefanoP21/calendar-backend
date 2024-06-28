@@ -1,6 +1,7 @@
 export { EventDatasource } from './datasources/event.datasource';
 export { CreateEventDto, UpdateEventDto } from './dtos';
 export { EventEntity } from './entity/event.entity';
+export { CustomError } from './errors/custom-error';
 export { EventRepository } from './repositories/event.repository';
 
 export { CreateEvent } from './use-cases/event/create-event';
