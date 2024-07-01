@@ -18,7 +18,7 @@ export class EventDatasourceImpl implements EventDatasource {
     const events = await EventModel.find().populate('user', 'name');
 
     if (events.length < 1) {
-      throw new CustomError('Events not found on database', 404);
+      throw CustomError.notFound('Events not found on database');
     }
 
     return events.map((event) => EventEntity.fromObject(event));
@@ -27,7 +27,7 @@ export class EventDatasourceImpl implements EventDatasource {
   async findById(id: string): Promise<EventEntity> {
     const event = await EventModel.findById(id);
 
-    if (!event) throw new CustomError(`Event with id ${id} not found`);
+    if (!event) throw CustomError.badRequest(`Event with id ${id} not found`);
 
     return EventEntity.fromObject(event);
   }
