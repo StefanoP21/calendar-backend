@@ -1,3 +1,5 @@
+import { CustomError } from '../errors/custom-error';
+
 export class EventEntity {
   constructor(
     public id: string,
@@ -9,10 +11,13 @@ export class EventEntity {
   ) {}
 
   public static fromObject(object: { [key: string]: any }): EventEntity {
-    const { id, title, start, end, user, notes } = object;
+    const { id, _id, title, start, end, user, notes } = object;
 
-    if (!id || !title || !start || !end || !user)
-      throw 'Missign required fields in event entity';
+    if (!id && _id) throw CustomError.badRequest('Id property is required');
+    if (!title) throw CustomError.badRequest('Title property is required');
+    if (!start) throw CustomError.badRequest('Start property is required');
+    if (!end) throw CustomError.badRequest('End property is required');
+    if (!user) throw CustomError.badRequest('User property is required');
 
     let newStart;
     let newEnd;
