@@ -1,7 +1,7 @@
 import { EventEntity } from '../../entity/event.entity';
 import { EventRepository } from '../../repositories/event.repository';
 
-export interface GetEventUseCase {
+interface GetEventUseCase {
   execute(id: string): Promise<EventEntity>;
 }
 

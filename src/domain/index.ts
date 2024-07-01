@@ -1,3 +1,4 @@
+export { AuthDatasource } from './datasources/auth.datasource';
 export { EventDatasource } from './datasources/event.datasource';
 
 export {
@@ -12,7 +13,11 @@ export { UserEntity } from './entity/user.entity';
 
 export { CustomError } from './errors/custom-error';
 
+export { AuthRepository } from './repositories/auth.repository';
 export { EventRepository } from './repositories/event.repository';
+
+export { LoginUser } from './use-cases/auth/login-user';
+export { RegisterUser } from './use-cases/auth/register-user';
 
 export { CreateEvent } from './use-cases/event/create-event';
 export { DeleteEvent } from './use-cases/event/delete-event';

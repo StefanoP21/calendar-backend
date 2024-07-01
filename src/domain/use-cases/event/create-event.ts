@@ -2,7 +2,7 @@ import { CreateEventDto } from '../../dtos';
 import { EventEntity } from '../../entity/event.entity';
 import { EventRepository } from '../../repositories/event.repository';
 
-export interface CreateEventUseCase {
+interface CreateEventUseCase {
   execute(dto: CreateEventDto): Promise<EventEntity>;
 }
 

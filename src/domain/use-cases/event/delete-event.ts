@@ -1,7 +1,7 @@
 import { EventEntity } from '../../entity/event.entity';
 import { EventRepository } from '../../repositories/event.repository';
 
-export interface DeleteEventUseCase {
+interface DeleteEventUseCase {
   execute(id: string): Promise<EventEntity>;
 }
 
