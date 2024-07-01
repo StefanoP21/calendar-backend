@@ -7,9 +7,9 @@ interface LoginUserUseCase {
 }
 
 export class LoginUser implements LoginUserUseCase {
-  constructor(private readonly repsotory: AuthRepository) {}
+  constructor(private readonly repository: AuthRepository) {}
 
   execute(dto: LoginUserDto): Promise<UserEntity> {
-    return this.repsotory.login(dto);
+    return this.repository.login(dto);
   }
 }

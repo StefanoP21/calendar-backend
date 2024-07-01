@@ -1,4 +1,4 @@
-import { EventModel } from '../../data/mongodb';
+import { EventModel } from '../../data';
 import {
   CreateEventDto,
   CustomError,
@@ -9,9 +9,13 @@ import {
 
 export class EventDatasourceImpl implements EventDatasource {
   async create(createEventDto: CreateEventDto): Promise<EventEntity> {
-    const newEvent = await EventModel.create(createEventDto);
+    try {
+      const newEvent = await EventModel.create(createEventDto);
 
-    return EventEntity.fromObject(newEvent);
+      return EventEntity.fromObject(newEvent);
+    } catch (error) {
+      throw CustomError.internalServerError(`${error}`);
+    }
   }
 
   async getAll(): Promise<EventEntity[]> {
