@@ -22,7 +22,7 @@ export class EventController {
       });
     }
 
-    res.status(500).json({
+    return res.status(500).json({
       ok: false,
       msg: `Internal server error: ${error}`,
     });
