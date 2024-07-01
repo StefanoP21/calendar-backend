@@ -24,16 +24,18 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
       //* jwt
       const jwtAdapter = new JwtAdapter(Envs.secretJwtSeed());
-      const token = await jwtAdapter.generateToken({
+      const token = (await jwtAdapter.generateToken({
         id: user.id,
-      });
+      })) as string;
 
       if (!token)
         throw CustomError.internalServerError('Error while generating token');
 
-      // const {password, ...userEntity} = UserEntity.fromObject(user);
+      const { password, ...userEntity } = UserEntity.fromObject(user);
 
-      return UserEntity.fromObject(user);
+      userEntity.token = token;
+
+      return userEntity;
     } catch (error) {
       throw CustomError.internalServerError(`${error}`);
     }
@@ -41,25 +43,27 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
   async login(loginUserDto: LoginUserDto): Promise<UserEntity> {
     const user = await UserModel.findOne({ email: loginUserDto.email });
-    if (!user) throw CustomError.badRequest('Email not exist');
+    if (!user) throw CustomError.notFound('Email not exist');
 
     const passswordIsValid = BcryptAdapter.compare(
       loginUserDto.password,
       user.password
     );
 
-    if (!passswordIsValid) throw CustomError.badRequest('Incorrect password');
-    // const {password, ...userEntity} = UserEntity.fromObject(user);
+    if (!passswordIsValid) throw CustomError.unauthorized('Incorrect password');
+    const { password, ...userEntity } = UserEntity.fromObject(user);
 
     //* jwt
     const jwtAdapter = new JwtAdapter(Envs.secretJwtSeed());
-    const token = jwtAdapter.generateToken({
+    const token = (await jwtAdapter.generateToken({
       id: user.id,
-    });
+    })) as string;
 
     if (!token)
       throw CustomError.internalServerError('Error while generating token');
 
-    return UserEntity.fromObject(user);
+    userEntity.token = token;
+
+    return userEntity;
   }
 }

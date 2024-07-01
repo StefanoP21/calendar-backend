@@ -42,6 +42,7 @@ export class AuthController {
           ok: true,
           uid: user.id,
           name: user.name,
+          token: user.token,
         })
       )
       .catch((error) => this.handleError(res, error));
@@ -64,6 +65,7 @@ export class AuthController {
           ok: true,
           uid: user.id,
           name: user.name,
+          token: user.token,
         })
       )
       .catch((error) => this.handleError(res, error));
