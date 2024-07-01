@@ -38,6 +38,6 @@ export class EventEntity {
       }
     }
 
-    return new EventEntity(id, title, start, end, user, notes);
+    return new EventEntity(_id || id, title, start, end, user, notes);
   }
 }
