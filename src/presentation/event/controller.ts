@@ -72,12 +72,7 @@ export class EventController {
           event: newEvent,
         })
       )
-      .catch((error) =>
-        res.status(400).json({
-          ok: false,
-          msg: error,
-        })
-      );
+      .catch((error) => this.handleError(res, error));
   };
 
   public updateEvent = (req: Request, res: Response) => {

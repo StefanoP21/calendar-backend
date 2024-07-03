@@ -66,6 +66,8 @@ export class AuthMiddleware {
         });
       }
 
+      event.user = req.uid as any;
+
       next();
     } catch (error) {
       res.status(500).json({ error: `Internal server error: ${error}` });

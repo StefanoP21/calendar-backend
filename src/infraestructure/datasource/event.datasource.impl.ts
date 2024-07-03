@@ -37,10 +37,10 @@ export class EventDatasourceImpl implements EventDatasource {
   }
 
   async updateById(updateEventDto: UpdateEventDto): Promise<EventEntity> {
-    await this.findById(updateEventDto.id);
+    const event = await this.findById(updateEventDto.id);
 
     const updatedEvent = await EventModel.findByIdAndUpdate(
-      updateEventDto.id,
+      event.id,
       updateEventDto,
       {
         new: true,
