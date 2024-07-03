@@ -5,6 +5,7 @@ import {
   CustomError,
   LoginUserDto,
   RegisterUserDto,
+  RenewUserDto,
   UserEntity,
 } from '../../domain';
 
@@ -26,6 +27,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
       const jwtAdapter = new JwtAdapter(Envs.secretJwtSeed());
       const token = (await jwtAdapter.generateToken({
         id: user.id,
+        name: user.name,
       })) as string;
 
       if (!token)
@@ -57,6 +59,30 @@ export class AuthDatasourceImpl implements AuthDatasource {
     const jwtAdapter = new JwtAdapter(Envs.secretJwtSeed());
     const token = (await jwtAdapter.generateToken({
       id: user.id,
+      name: user.name,
+    })) as string;
+
+    if (!token)
+      throw CustomError.internalServerError('Error while generating token');
+
+    userEntity.token = token;
+
+    return userEntity;
+  }
+
+  async renew(renewUserDto: RenewUserDto): Promise<UserEntity> {
+    const { uid, name } = renewUserDto;
+
+    const user = await UserModel.findById(uid);
+    if (!user) throw CustomError.notFound('Invalid token');
+
+    const { password, ...userEntity } = UserEntity.fromObject(user);
+
+    //* jwt
+    const jwtAdapter = new JwtAdapter(Envs.secretJwtSeed());
+    const token = (await jwtAdapter.generateToken({
+      id: uid,
+      name,
     })) as string;
 
     if (!token)

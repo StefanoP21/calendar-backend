@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 export class JwtAdapter {
-  constructor(public readonly seed: string) {}
+  constructor(private readonly seed: string) {}
 
   async generateToken(payload: any, duration: string = '2h') {
     return new Promise((resolve) => {
@@ -13,12 +13,12 @@ export class JwtAdapter {
     });
   }
 
-  async validateToken(token: string) {
+  async validateToken<T>(token: string): Promise<T | null> {
     return new Promise((resolve) => {
       jwt.verify(token, this.seed, (err, decoded) => {
         if (err) return resolve(null);
 
-        resolve(decoded);
+        resolve(decoded as T);
       });
     });
   }
