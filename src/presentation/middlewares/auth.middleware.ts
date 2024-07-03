@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { Envs, JwtAdapter } from '../../config';
 import { AuthRequest } from '../../domain';
+import { EventModel } from '../../data';
 
 export class AuthMiddleware {
   static async validateJwt(
@@ -38,6 +39,36 @@ export class AuthMiddleware {
         ok: false,
         msg: `Internal server error: ${error}`,
       });
+    }
+  }
+
+  static async validateUser(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
+    const eventId = req.params.id;
+
+    try {
+      const event = await EventModel.findById(eventId);
+
+      if (!event) {
+        return res.status(404).json({
+          ok: false,
+          msg: `Event with id ${eventId} not found`,
+        });
+      }
+
+      if (event.user.toString() !== req.uid) {
+        return res.status(401).json({
+          ok: false,
+          msg: 'Not permission to edit this event',
+        });
+      }
+
+      next();
+    } catch (error) {
+      res.status(500).json({ error: `Internal server error: ${error}` });
     }
   }
 }
