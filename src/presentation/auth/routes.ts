@@ -17,7 +17,7 @@ export class AuthRoutes {
     router.get(
       '/renew',
       [AuthMiddleware.validateJwt as any],
-      authController.loginUser
+      authController.renewToken as any
     );
 
     return router;
