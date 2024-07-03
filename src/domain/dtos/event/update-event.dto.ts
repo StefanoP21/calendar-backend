@@ -21,7 +21,7 @@ export class UpdateEventDto {
   }
 
   static update(object: { [key: string]: any }): [string?, UpdateEventDto?] {
-    const { user, title, start, end, notes } = object;
+    const { id, user, title, start, end, notes } = object;
     let newStart = start;
     let newEnd = end;
 
@@ -41,6 +41,6 @@ export class UpdateEventDto {
       }
     }
 
-    return [undefined, new UpdateEventDto(user, title, start, end, notes)];
+    return [undefined, new UpdateEventDto(id, user, title, start, end, notes)];
   }
 }
